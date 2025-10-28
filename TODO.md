@@ -1,3 +1,6 @@
-- Update Stripe success and cancel URLs in backend/server.js to localhost:3000 ✅
-- Update home links in backend/public/success.html and cancel.html to localhost:3000 ✅
-- Test local payment flow: Backend running on port 5000, frontend on port 3000. Payment flow should now redirect to localhost URLs. ✅ API tested successfully, returns Stripe checkout URL.
+- [x] Replace localhost:5000 with https://movie-booking-backend.onrender.com in frontend/src/pages/Login.jsx
+- [x] Replace localhost:5000 with https://movie-booking-backend.onrender.com in frontend/src/pages/Register.jsx
+- [x] Replace localhost:5000 with https://movie-booking-backend.onrender.com in frontend/src/pages/Checkout.jsx
+- [x] Replace localhost:5000 with https://movie-booking-backend.onrender.com in frontend/src/pages/Success.jsx
+- [ ] Run npm run build in frontend directory
+- [ ] Git add, commit, and push changes
