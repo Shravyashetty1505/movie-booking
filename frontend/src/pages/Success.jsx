@@ -27,7 +27,7 @@ export default function Success() {
         if (user) {
           try {
             const total = booking.seats.length * booking.pricePerSeat;
-            const res = await fetch("https://movie-booking-backend.onrender.com/api/bookings", {
+            const res = await fetch("https://movie-booking-wo0e.onrender.com/api/bookings", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({

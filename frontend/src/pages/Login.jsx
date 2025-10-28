@@ -10,7 +10,7 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://movie-booking-backend.onrender.com/api/auth/login", {
+      const res = await fetch("https://movie-booking-wo0e.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
