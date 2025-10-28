@@ -1,7 +1,4 @@
 require("dotenv").config();
-console.log("Loaded PORT from .env:", process.env.PORT);
-console.log("Loaded MONGO_URI:", process.env.MONGO_URI ? "✅ Found" : "❌ Missing");
-
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -10,10 +7,18 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ Use your local or deployed frontend
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+// ✅ Your deployed frontend URL
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://movie-booking-rho-coral.vercel.app";
 
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+// ✅ CORS setup - allow your frontend domain
+app.use(
+  cors({
+    origin: [FRONTEND_URL, "http://localhost:3000"], // allow local + deployed
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // ✅ MongoDB connection
@@ -22,21 +27,21 @@ mongoose
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB error:", err));
 
-// ✅ Import routes
+// ✅ Routes
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
-// ✅ Test route
+// ✅ Root test route
 app.get("/", (req, res) => {
-  res.send("✅ Stripe backend is running successfully!");
+  res.send("✅ Backend is running successfully!");
 });
 
-// ✅ Payment route
+// ✅ Stripe Payment route
 app.post("/payment", async (req, res) => {
   try {
     const { amount, movieTitle } = req.body;
-    const Booking = require("./models/Booking");
-    console.log("Creating payment for", movieTitle, "₹" + amount);
+
+    console.log("Creating payment for:", movieTitle, "₹" + amount);
     console.log("Using success URL:", `${FRONTEND_URL}/success`);
 
     const session = await stripe.checkout.sessions.create({
@@ -47,7 +52,7 @@ app.post("/payment", async (req, res) => {
           price_data: {
             currency: "inr",
             product_data: { name: movieTitle || "Movie Ticket" },
-            unit_amount: Math.round(amount * 100),
+            unit_amount: Math.round(amount * 100), // Stripe needs paise
           },
           quantity: 1,
         },
@@ -84,7 +89,8 @@ app.post("/api/bookings", async (req, res) => {
   }
 });
 
+// ✅ Start server
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`🌐 FRONTEND_URL set to: ${FRONTEND_URL}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌐 FRONTEND_URL: ${FRONTEND_URL}`);
 });
